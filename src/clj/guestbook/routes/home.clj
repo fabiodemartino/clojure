@@ -16,9 +16,13 @@
 
    [struct.core :as st]))
 
-(defn home-page [request]
+(defn home-page [{:keys [flash] :as request}]
 
-  (layout/render request "home.html" {:docs (-> "docs/docs.md" io/resource slurp)}))
+  (layout/render 
+    request "home.html" 
+    
+    (merge {:messages (db/get-messages)}
+           (select-keys flash [:name :message :errors]))))
 
 (defn about-page [request]
 
